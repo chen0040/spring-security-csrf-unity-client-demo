@@ -41,6 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
               .antMatchers("/js/admin/**").hasAnyRole("ADMIN")
               .antMatchers("/html/**").hasAnyRole("USER", "ADMIN")
               .antMatchers("/erp/login-api-json").permitAll()
+              .antMatchers("/erp/login-api-form-post").permitAll()
               .antMatchers("/css/**").permitAll()
               .antMatchers("/jslib/**").permitAll()
               .antMatchers("/webjars/**").permitAll()

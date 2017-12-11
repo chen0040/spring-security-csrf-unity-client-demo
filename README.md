@@ -1,12 +1,12 @@
-# spring-security-csrf-android-demo
+# spring-security-csrf-Unity-demo
 
-This project contains demo codes on how to communicate an android project with a spring boot application that has spring security and CSRF enabled.
+This project contains demo codes on how to communicate an Unity project with a spring boot application that has spring security and CSRF enabled.
 
 # Features
 
 * Simple spring boot web application with spring security and CSRF enabled
 * Java client to authenticate and communicate with the spring boot web application
-* Android client to authenticate and communicate with the spring boot web application
+* Unity client to authenticate and communicate with the spring boot web application
 
 # Spring Security
 
@@ -129,9 +129,9 @@ System.out.println(JSON.toJSONString(identity, SerializerFeature.PrettyFormat));
 System.out.println(client.getSecured("http://localhost:8080/users/get-account"));
 ```
 
-### Android Client
+### Unity Client
 
-The following are the excerpt from spring-boot-android-client unit test to show how to login to the spring-boot-application:
+The following are the excerpt from spring-boot-unity-client unit test to show how to login to the spring-boot-application:
 
 ```bash
 SpringBootClient client = new SpringBootClient();
