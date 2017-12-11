@@ -59,7 +59,7 @@ http
 
 which can be found in the com.github.chen0040.bootslingshot.configs.WebSecurityConfig
 
-### principle behind restful login to spring-boot-application
+### Principle behind json post login to spring-boot-application
 
 The web login api can be found in the com.github.chen0040.bootslingshot.controllers.WebApiController. which consists
  of GET and POST api for the same url "/erp/login-api-json".
@@ -71,6 +71,34 @@ GET: http://localhost:8080/erp/login-api-json
 this will return a json object containing a valid csrf token YOUR_CSRF_TOKEN, the same client can then post to the same url:
 
 POST: http://localhost:8080/erp/login-api-json
+
+with the following headers:
+
+* _csrf: YOUR_CSRF_TOKEN
+* Cookie: XSRF-TOKEN=YOUR_CSRF_TOKEN
+* X-XSRF-TOKEN: YOUR_CSRF_TOKEN 
+
+If login is successful, you can find the response json object has authenticated set to true.
+By examining the Set-Cookie header of the POST response, you should be able to extract the JSESSIONID=YOUR_SESSION_ID.
+
+Now after login is successful, you can access the spring security protected api by adding the following in the header:
+
+* _csrf: YOUR_CSRF_TOKEN
+* Cookie: XSRF-TOKEN=YOUR_CSRF_TOKEN;JSESSIONID=YOUR_SESSION_ID
+* X-XSRF-TOKEN: YOUR_CSRF_TOKEN 
+
+### Principle behind form post login to spring-boot-application
+
+The web login api can be found in the com.github.chen0040.bootslingshot.controllers.WebFormPostController. which consists
+ of GET and POST api for the same url "/erp/login-api-form-post".
+ 
+Any client which wants to authenticate with the spring security in spring-boot-application can first call
+
+GET: http://localhost:8080/erp/login-api-form-post
+
+this will return a json object containing a valid csrf token YOUR_CSRF_TOKEN, the same client can then post to the same url:
+
+POST: http://localhost:8080/erp/login-api-form-post
 
 with the following headers:
 
@@ -131,15 +159,30 @@ System.out.println(client.getSecured("http://localhost:8080/users/get-account"))
 
 ### Unity Client
 
-The following are the excerpt from spring-boot-unity-client unit test to show how to login to the spring-boot-application:
+The following are the excerpt from spring-boot-unity-client unit test to show how to form post login to the spring-boot-application:
 
-```bash
-SpringBootClient client = new SpringBootClient();
+```cs 
+StartCoroutine(SpringBootClient.Instance.LoginByFormPost("admin", "admin", data =>
+{
+	if (data.authenticated)
+	{
+		Debug.Log("Successfully authenticated!");
+		
+	}
+}));
+```
 
-SpringIdentity identity = client.login("http://localhost:8080/erp/login-api-json", "admin", "admin");
+The following are the excerpt from spring-boot-unity-client unit test to show how to json post login to the spring-boot-application:
 
-System.out.println(JSON.toJSONString(identity, SerializerFeature.PrettyFormat));
-System.out.println(client.getSecured("http://localhost:8080/users/get-account"));
+```cs 
+StartCoroutine(SpringBootClient.Instance.Login("admin", "admin", data =>
+{
+	if (data.authenticated)
+	{
+		Debug.Log("Successfully authenticated!");
+		
+	}
+}));
 ```
 
 

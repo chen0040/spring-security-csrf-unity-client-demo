@@ -43,29 +43,24 @@ public class SpringBootClient : MonoBehaviour {
         _csrf = result["_csrf.token"];
 
         Debug.Log("_csrf: " + _csrf);
-
-        LoginObj loginObj = new LoginObj();
-        loginObj.username = username;
-        loginObj.password = password;
-
-        json = JsonConvert.SerializeObject(loginObj);
-
-        Debug.Log("send: " + json);
-
-        WWWForm form = new WWWForm();
-        form.AddField("username", username);
-        form.AddField("password", password);
-
-
-        Dictionary<string, string> headers = new Dictionary<string, string>();
-        form.headers.Add("_csrf", _csrf);
-        form.headers.Add("Cookie", "XSRF-TOKEN=" + _csrf);
-        form.headers.Add("X-XSRF-TOKEN", _csrf);
-
+        
         
 
+        string data = "username=" + EncodeUriComponent(username) + "&password=" + EncodeUriComponent(password);
+
+        Debug.Log("send: " + data);
+
+        byte[] postData = System.Text.Encoding.UTF8.GetBytes(data);
+
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+        headers.Add("Content-Type", "application/x-www-form-urlencoded");
+        headers.Add("_csrf", _csrf);
+        headers.Add("Cookie", "XSRF-TOKEN=" + _csrf);
+        headers.Add("X-XSRF-TOKEN", _csrf);
+
+
         //Now we call a new WWW request
-        WWW www = new WWW(baseUrl + "/erp/login-api-form-post", form);
+        WWW www = new WWW(baseUrl + "/erp/login-api-form-post", postData, headers);
 
         yield return www;
 
@@ -109,6 +104,8 @@ public class SpringBootClient : MonoBehaviour {
         Debug.Log(json);
 
         SpringIdentity si = JsonConvert.DeserializeObject<SpringIdentity>(json);
+
+        callback(si);
     }
 
 

@@ -6,9 +6,12 @@ public class SampleMain : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         Debug.Log("start");
-        StartCoroutine(SpringBootClient.Instance.Login("admin", "admin", data =>
+        StartCoroutine(SpringBootClient.Instance.LoginByFormPost("admin", "admin", data =>
         {
-            Debug.Log(data);
+            if (data.authenticated)
+            {
+                Debug.Log("Successfully authenticated!");
+            }
         }));
 	}
 	
