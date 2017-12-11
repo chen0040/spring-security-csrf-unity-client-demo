@@ -11,6 +11,8 @@ public class SampleMain : MonoBehaviour {
             if (data.authenticated)
             {
                 Debug.Log("Successfully authenticated!");
+                Debug.Log("JSESSIONID: " + SpringBootClient.Instance.sessionId);
+                Debug.Log("CSRF: " + SpringBootClient.Instance._csrf);
             }
         }));
 	}

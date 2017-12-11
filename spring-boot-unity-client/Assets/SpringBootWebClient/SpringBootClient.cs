@@ -9,8 +9,8 @@ public class SpringBootClient : MonoBehaviour {
 
     private string baseUrl = "http://localhost:8080";
     private static SpringBootClient mInstance = null;
-    private string _csrf = null;
-    private string sessionId = null;
+    public string _csrf { get; set; }
+    public string sessionId { get; set; }
 
     // Use this for initialization
     void Start()
@@ -186,6 +186,8 @@ public class SpringBootClient : MonoBehaviour {
         json = www.text;
 
         SpringIdentity si = JsonConvert.DeserializeObject<SpringIdentity>(json);
+
+        callback(si);
     }
     
 	

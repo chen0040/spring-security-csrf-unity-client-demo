@@ -1,4 +1,4 @@
-# spring-security-csrf-Unity-demo
+# spring-security-csrf-unity-demo
 
 This project contains demo codes on how to communicate an Unity project with a spring boot application that has spring security and CSRF enabled.
 
@@ -167,7 +167,8 @@ StartCoroutine(SpringBootClient.Instance.LoginByFormPost("admin", "admin", data 
 	if (data.authenticated)
 	{
 		Debug.Log("Successfully authenticated!");
-		
+		Debug.Log("JSESSIONID: " + SpringBootClient.Instance.sessionId);
+		Debug.Log("CSRF: " + SpringBootClient.Instance._csrf);
 	}
 }));
 ```
@@ -180,7 +181,8 @@ StartCoroutine(SpringBootClient.Instance.Login("admin", "admin", data =>
 	if (data.authenticated)
 	{
 		Debug.Log("Successfully authenticated!");
-		
+		Debug.Log("JSESSIONID: " + SpringBootClient.Instance.sessionId);
+		Debug.Log("CSRF: " + SpringBootClient.Instance._csrf);
 	}
 }));
 ```
