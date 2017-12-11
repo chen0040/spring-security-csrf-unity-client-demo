@@ -4,10 +4,11 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 
 public delegate void LoginCallback(SpringIdentity category);
+public delegate void GetSecuredCallback(string text);
 
 public class SpringBootClient : MonoBehaviour {
 
-    private string baseUrl = "http://localhost:8080";
+    public string baseUrl { get; set;}
     private static SpringBootClient mInstance = null;
     public string _csrf { get; set; }
     public string sessionId { get; set; }
@@ -15,7 +16,10 @@ public class SpringBootClient : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-
+        if(baseUrl == null || baseUrl == "")
+        {
+            baseUrl = "http://localhost:8080";
+        }
     }
 
     public void Initialize(string baseUrl)
@@ -23,18 +27,35 @@ public class SpringBootClient : MonoBehaviour {
         this.baseUrl = baseUrl;
     }
 
-    public IEnumerator LoginByFormPost(string username, string password, LoginCallback callback)
+    public IEnumerator GetSecured(string url, GetSecuredCallback callback)
+    {
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+        headers.Add("_csrf", _csrf);
+        headers.Add("Cookie", "XSRF-TOKEN=" + _csrf + ";JSESSIONID=" + sessionId);
+        headers.Add("X-XSRF-TOKEN", _csrf);
+
+        WWW cases = new WWW(url, null, headers);
+        yield return cases;
+
+        string json = cases.text;
+
+        callback(json);
+
+        
+    }
+
+        public IEnumerator LoginByFormPost(string username, string password, LoginCallback callback)
     {
         WWW cases = new WWW(baseUrl + "/erp/login-api-form-post");
         yield return cases;
 
         string json = cases.text;
 
-        
+        /*
         foreach(string header_name in cases.responseHeaders.Keys)
         {
             Debug.Log("GET HEADER[" + header_name + "] = " + cases.responseHeaders[header_name]);
-        }
+        }*/
 
         Debug.Log(json);
 
@@ -69,7 +90,7 @@ public class SpringBootClient : MonoBehaviour {
         string set_cookie = null;
         foreach (string header_name in www.responseHeaders.Keys)
         {
-            Debug.Log("POST HEADER[" + header_name + "] = " + www.responseHeaders[header_name]);
+            //Debug.Log("POST HEADER[" + header_name + "] = " + www.responseHeaders[header_name]);
             if (header_name.ToLower() == "set-cookie")
             {
                 set_cookie = www.responseHeaders[header_name];
