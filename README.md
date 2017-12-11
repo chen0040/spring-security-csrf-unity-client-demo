@@ -183,7 +183,7 @@ The following are the excerpt from spring-boot-unity-client unit test to show ho
 
 ```cs 
 SpringBootClient.Instance.baseUrl = "http://localhost:8080";
-StartCoroutine(SpringBootClient.Instance.LoginByFormPost("admin", "admin", data =>
+StartCoroutine(SpringBootClient.Instance.Login("admin", "admin", data =>
 {
 	if (data.authenticated)
 	{
