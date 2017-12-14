@@ -19,6 +19,13 @@ public class SampleMain : MonoBehaviour {
                 {
                     Debug.Log("account: " + json);
                 }));
+
+                SpringIdentity si = new SpringIdentity();
+                si.username = "demo";
+                StartCoroutine(SpringBootClient.Instance.PostJsonSecured("http://localhost:8080/users/get-account-by-username", si, json =>
+                {
+                    Debug.Log("account: " + json);
+                }));
             }
         }));
 	}

@@ -44,7 +44,32 @@ public class SpringBootClient : MonoBehaviour {
         
     }
 
-        public IEnumerator LoginByFormPost(string username, string password, LoginCallback callback)
+    public IEnumerator PostJsonSecured(string url, object obj, GetSecuredCallback callback)
+    {
+        string json = JsonConvert.SerializeObject(obj);
+
+        Debug.Log("send: " + json);
+
+
+        byte[] postData = System.Text.Encoding.UTF8.GetBytes(json);
+
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+        headers.Add("_csrf", _csrf);
+        headers.Add("Cookie", "XSRF-TOKEN=" + _csrf + ";JSESSIONID=" + sessionId);
+        headers.Add("X-XSRF-TOKEN", _csrf);
+        headers.Add("Content-Type", "application/json");
+
+        WWW cases = new WWW(url, postData, headers);
+        yield return cases;
+
+        json = cases.text;
+
+        callback(json);
+
+
+    }
+
+    public IEnumerator LoginByFormPost(string username, string password, LoginCallback callback)
     {
         WWW cases = new WWW(baseUrl + "/erp/login-api-form-post");
         yield return cases;

@@ -143,7 +143,10 @@ DEMO:
 * username: demo
 * password: demo
 
-In the following instructions, http://localhost:8080/users/get-account is an url that requires authentication.
+In the following instructions, 
+
+* http://localhost:8080/users/get-account is an GET url that requires authentication.
+* http://localhost:8080/users/get-account-by-username is an POST url that requires authentication
 
 ### Java Client
 
@@ -195,6 +198,13 @@ StartCoroutine(SpringBootClient.Instance.Login("admin", "admin", data =>
 		{
 			Debug.Log("account: " + json);
 		}));
+		
+        SpringIdentity si = new SpringIdentity();
+        si.username = "demo";
+        StartCoroutine(SpringBootClient.Instance.PostJsonSecured("http://localhost:8080/users/get-account-by-username", si, json =>
+        {
+            Debug.Log("account: " + json);
+        }));
 	}
 }));
 ```
